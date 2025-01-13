@@ -12,7 +12,7 @@ function Recipe() {
   useEffect(() => {
     fetchRecipes();
   }, []);
-
+  
   return (
     <div>
       <h2>Recipes</h2>

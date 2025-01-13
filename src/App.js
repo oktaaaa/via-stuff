@@ -7,9 +7,10 @@ import {
   Navigate,
 } from "react-router-dom";
 import User from "./pages/User";
-import Recipe from "./pages/Recipe";
-import Category from "./pages/Category";
+import Recipe from "./pages/Recipe/Recipe";
+import Category from "./pages/Category/Category";
 import Review from "./pages/Review";
+import CreateRecipe from "./pages/Recipe/CreateRecipe";
 
 function App() {
   // Check if the user is logged in by checking the token in localStorage
@@ -29,13 +30,13 @@ function App() {
           <Route
             path="/"
             element={
-              isLoggedIn ? <Navigate to="/recipes" /> : <Navigate to="/login" />
+              isLoggedIn ? <Navigate to="/recipe" /> : <Navigate to="/login" />
             }
           />
           <Route path="/login" element={<User isLogin={true} />} />
           <Route path="/register" element={<User isLogin={false} />} />
           <Route
-            path="/recipes"
+            path="/recipe"
             element={isLoggedIn ? <Recipe /> : <Navigate to="/login" />}
           />
           <Route
@@ -46,6 +47,7 @@ function App() {
             path="/reviews"
             element={isLoggedIn ? <Review /> : <Navigate to="/login" />}
           />
+          <Route path="/recipe/create" element={<CreateRecipe />} />
         </Routes>
       </div>
     </Router>

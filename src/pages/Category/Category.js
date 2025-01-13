@@ -5,7 +5,9 @@ function Category() {
   const [categories, setCategories] = useState([]);
 
   const fetchCategories = async () => {
-    const response = await axios.get("http://localhost:3000/category");
+    const response = await axios.get(
+      "https://bukuresep-api.vercel.app/category"
+    );
     setCategories(response.data);
   };
 
@@ -18,7 +20,7 @@ function Category() {
       <h2>Categories</h2>
       <ul>
         {categories.map((category) => (
-          <li key={category._id}>{category.category_name}</li>
+          <li key={category._id}>{category.categoryName}</li>
         ))}
       </ul>
     </div>
