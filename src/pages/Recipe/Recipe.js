@@ -1,32 +1,82 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import Axios from "axios";
+import Cookies from "js-cookie";
+import React, { useEffect, useState } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
 
-function Recipe() {
-  const [recipes, setRecipes] = useState([]);
-
-  const fetchRecipes = async () => {
-    const response = await axios.get("https://bukuresep-api.vercel.app/recipe");
-    setRecipes(response.data);
+const Recipe = () => {
+  const [recipe, setRecipe] = useState([]);
+  const navigate = useNavigate();
+  const handleDelete = async (id, nama) => {
+    if (window.confirm(`yakin mau hapus prodi: ${nama} ?`)) {
+      try {
+        await Axios.delete(`https://bukuresep-api.vercel.app/recipe/${id}`).then(
+          window.location.reload()
+        );
+      } catch (error) {
+        alert(error);
+      }
+    }
   };
-
   useEffect(() => {
-    fetchRecipes();
+    Axios.get("https://bukuresep-api.vercel.app/recipe")
+      .then((res) => {
+        const { data } = res;
+        setRecipe(data);
+        // console.log(res);
+      })
+      .catch((error) => {
+        alert(error);
+      });
   }, []);
-  
+
   return (
-    <div>
-      <h2>Recipes</h2>
-      <ul>
-        {recipes.map((recipe) => (
-          <li key={recipe._id}>
-            {recipe.namaResep} - {recipe.categoryId.categoryName}
-            <h3>{recipe.bahan}</h3>
-            <p>{recipe.instruksi}</p>
-          </li>
-        ))}
-      </ul>
-    </div>
+    <>
+      <h2>Halama List Prodi</h2>
+      {/* <button
+        className="btn btn-primary"
+        onClick={() => navigate("/recipe/create")}
+      >
+        {" "}
+        +Tambah
+      </button> */}
+      <table className="table table-striped">
+        <thead>
+          <tr >
+            <th>Nama Resep</th>
+            <th>Nama Bahan</th>
+            <th>#</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {recipe &&
+            recipe.map((rp, index) => {
+              return (
+                <tr key={index}>
+                  <td>{rp.namaResep}</td>
+                  <td>{rp.bahan}</td>
+                  {/* <td>
+                    <NavLink
+                      to={`/`}
+                      className="btn btn-sm btn-warning"
+                    >
+                      Ubah
+                    </NavLink>{" "}
+                    &nbsp;
+                    <button
+                      className="btn btn-sm btn-danger"
+                      onClick={() => handleDelete(rp._id, rp.namaResep)}
+                    >
+                      Hapus
+                    </button>
+                  </td> */}
+                </tr>
+              );
+            })}
+        </tbody>
+      </table>
+    </>
   );
-}
+};
 
 export default Recipe;
