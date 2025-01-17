@@ -6,7 +6,6 @@ const Recipe = () => {
   const [recipes, setRecipes] = useState([]);
   const navigate = useNavigate();
 
-  // Fetch recipes from the API
   const fetchRecipes = async () => {
     try {
       const response = await Axios.get(
@@ -36,7 +35,6 @@ const Recipe = () => {
     }
   };
 
-  // Navigate to create recipe page
   const handleAddNewRecipe = () => {
     navigate("/recipe/create");
   };
@@ -66,7 +64,7 @@ const Recipe = () => {
                 <td>{recipe.namaResep}</td>
                 <td>
                   {typeof recipe.categoryId === "object"
-                    ? recipe.categoryId.categoryName // Adjust based on your API response
+                    ? recipe.categoryId.categoryName
                     : recipe.categoryId}
                 </td>
                 <td>{recipe.bahan}</td>

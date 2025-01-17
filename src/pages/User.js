@@ -4,12 +4,12 @@ import { useNavigate } from "react-router-dom";
 
 function User({ isLogin }) {
   const [form, setForm] = useState({
-    username: "", // Only for registration
+    username: "",
     email: "",
     password: "",
   });
   const [error, setError] = useState("");
-  const navigate = useNavigate(); // useNavigate hook to handle programmatic navigation
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -18,17 +18,15 @@ function User({ isLogin }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Select the correct URL based on whether it's login or register
     const url = isLogin
       ? "https://bukuresep-api.vercel.app/auth/login"
       : "https://bukuresep-api.vercel.app/auth/register";
 
-    // Prepare user data for API request
     const userData = isLogin
       ? { email: form.email, password: form.password }
       : { username: form.username, email: form.email, password: form.password };
 
-    // Check for empty fields if it's registration and username is required
+    
     if (!isLogin && !form.username) {
       setError("Username is required");
       return;
@@ -38,10 +36,6 @@ function User({ isLogin }) {
       const response = await axios.post(url, userData);
 
       if (response.data.token) {
-        // Store JWT token in localStorage
-        localStorage.setItem("token", response.data.token);
-
-        // Redirect to recipes page after successful login
         navigate("/recipe");
       }
     } catch (error) {
