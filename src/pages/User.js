@@ -36,9 +36,9 @@ function User({ isLogin }) {
         userData
       );
 
-      if (response.data.token) {
+      
         navigate("/recipe");
-      }
+      
     } catch (error) {
       setError(error.response?.data.message || "Something went wrong!");
     }
