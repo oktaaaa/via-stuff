@@ -25,10 +25,10 @@ const User = () =>{
             .then((res) => {
                 let {token} = res.data
                 let {nama} = res.data
-                let {role} = res.data
+               
                 Cookies.set('token', token)
                 Cookies.set('nama', nama)
-                Cookies.set('role', role)
+                
 
                 window.location.href = '/recipe'
             })
