@@ -14,7 +14,7 @@ import CreateRecipe from "./pages/Recipe/CreateRecipe";
 
 function App() {
   // Check if the user is logged in by checking the token in localStorage
-  const isLoggedIn = localStorage.getItem("token");
+  const isLoggedIn = "https://bukuresep-api.vercel.app/auth/login";
 
   return (
     <Router>
