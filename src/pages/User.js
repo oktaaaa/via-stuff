@@ -31,13 +31,13 @@ function User({ isLogin }) {
     }
 
     try {
-      const response = await axios.post(
+      axios.post(
         "https://bukuresep-api.vercel.app/auth/login",
         userData
       );
 
       
-        navigate("/recipe");
+      window.location.href ="/recipe";
       
     } catch (error) {
       setError(error.response?.data.message || "Something went wrong!");
