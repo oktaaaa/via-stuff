@@ -18,22 +18,23 @@ function User({ isLogin }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const url = isLogin
-      ? "https://bukuresep-api.vercel.app/auth/login"
-      : "https://bukuresep-api.vercel.app/auth/register";
+    
 
     const userData = isLogin
       ? { email: form.email, password: form.password }
       : { username: form.username, email: form.email, password: form.password };
 
-    
+    // Check for empty fields if it's registration and username is required
     if (!isLogin && !form.username) {
       setError("Username is required");
       return;
     }
 
     try {
-      const response = await axios.post(url, userData);
+      const response = await axios.post(
+        "https://bukuresep-api.vercel.app/auth/login",
+        userData
+      );
 
       if (response.data.token) {
         navigate("/recipe");
