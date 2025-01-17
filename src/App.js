@@ -9,7 +9,7 @@ import {
 import User from "./pages/User";
 import Recipe from "./pages/Recipe/Recipe";
 import Category from "./pages/Category/Category";
-import Review from "./pages/Review";
+import Review from "./pages/Review/Review";
 import CreateRecipe from "./pages/Recipe/CreateRecipe";
 
 function App() {
@@ -19,10 +19,65 @@ function App() {
   return (
     <Router>
       <div>
-        <nav>
-          <Link to="/login">Login</Link> | <Link to="/register">Register</Link>{" "}
-          | <Link to="/recipes">Recipes</Link> |{" "}
-          <Link to="/categories">Categories</Link>
+        {/* Bootstrap Navbar */}
+        <nav className="navbar navbar-expand-lg navbar-light bg-light">
+          <div className="container-fluid">
+            <Link className="navbar-brand" to="/">
+              RecipeApp
+            </Link>
+            <button
+              className="navbar-toggler"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#navbarNav"
+              aria-controls="navbarNav"
+              aria-expanded="false"
+              aria-label="Toggle navigation"
+            >
+              <span className="navbar-toggler-icon"></span>
+            </button>
+            <div className="collapse navbar-collapse" id="navbarNav">
+              <ul className="navbar-nav">
+                {isLoggedIn ? (
+                  <>
+                    <li className="nav-item">
+                      <Link className="nav-link" to="/recipe">
+                        Recipes
+                      </Link>
+                    </li>
+                    <li className="nav-item">
+                      <Link className="nav-link" to="/categories">
+                        Categories
+                      </Link>
+                    </li>
+                    <li className="nav-item">
+                      <Link className="nav-link" to="/review">
+                        Reviews
+                      </Link>
+                    </li>
+                    <li className="nav-item">
+                      <Link className="nav-link" to="/recipe/create">
+                        Create Recipe
+                      </Link>
+                    </li>
+                  </>
+                ) : (
+                  <>
+                    <li className="nav-item">
+                      <Link className="nav-link" to="/login">
+                        Login
+                      </Link>
+                    </li>
+                    <li className="nav-item">
+                      <Link className="nav-link" to="/register">
+                        Register
+                      </Link>
+                    </li>
+                  </>
+                )}
+              </ul>
+            </div>
+          </div>
         </nav>
 
         <Routes>
@@ -44,7 +99,7 @@ function App() {
             element={isLoggedIn ? <Category /> : <Navigate to="/login" />}
           />
           <Route
-            path="/reviews"
+            path="/review"
             element={isLoggedIn ? <Review /> : <Navigate to="/login" />}
           />
           <Route path="/recipe/create" element={<CreateRecipe />} />

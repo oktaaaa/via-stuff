@@ -42,7 +42,7 @@ function User({ isLogin }) {
         localStorage.setItem("token", response.data.token);
 
         // Redirect to recipes page after successful login
-        navigate("/recipes");
+        navigate("/recipe");
       }
     } catch (error) {
       setError(error.response?.data.message || "Something went wrong!");

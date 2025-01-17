@@ -1,81 +1,102 @@
 import Axios from "axios";
-import Cookies from "js-cookie";
 import React, { useEffect, useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Recipe = () => {
-  const [recipe, setRecipe] = useState([]);
+  const [recipes, setRecipes] = useState([]);
   const navigate = useNavigate();
-  const handleDelete = async (id, nama) => {
-    if (window.confirm(`yakin mau hapus prodi: ${nama} ?`)) {
+
+  // Fetch recipes from the API
+  const fetchRecipes = async () => {
+    try {
+      const response = await Axios.get(
+        "https://bukuresep-api.vercel.app/recipe"
+      );
+      setRecipes(response.data);
+    } catch (error) {
+      alert("Error fetching recipes:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchRecipes();
+  }, []);
+
+  // Handle delete action
+  const handleDelete = async (id, name) => {
+    if (
+      window.confirm(`Are you sure you want to delete the recipe: ${name}?`)
+    ) {
       try {
-        await Axios.delete(`https://bukuresep-api.vercel.app/recipe/${id}`).then(
-          window.location.reload()
-        );
+        await Axios.delete(`https://bukuresep-api.vercel.app/recipe/${id}`);
+        setRecipes(recipes.filter((recipe) => recipe._id !== id));
       } catch (error) {
-        alert(error);
+        alert("Error deleting recipe:", error);
       }
     }
   };
-  useEffect(() => {
-    Axios.get("https://bukuresep-api.vercel.app/recipe")
-      .then((res) => {
-        const { data } = res;
-        setRecipe(data);
-        // console.log(res);
-      })
-      .catch((error) => {
-        alert(error);
-      });
-  }, []);
+
+  // Navigate to create recipe page
+  const handleAddNewRecipe = () => {
+    navigate("/recipe/create");
+  };
 
   return (
-    <>
-      <h2>Halama List Prodi</h2>
-      {/* <button
-        className="btn btn-primary"
-        onClick={() => navigate("/recipe/create")}
-      >
-        {" "}
-        +Tambah
-      </button> */}
-      <table className="table table-striped">
-        <thead>
-          <tr >
-            <th>Nama Resep</th>
-            <th>Nama Bahan</th>
+    <div className="container mt-4">
+      <h2 className="mb-4">Recipe List</h2>
+      <button className="btn btn-primary mb-3" onClick={handleAddNewRecipe}>
+        + Add New Recipe
+      </button>
+      <table className="table table-striped table-bordered">
+        <thead className="thead-dark">
+          <tr>
             <th>#</th>
+            <th>Recipe Name</th>
+            <th>Category</th>
+            <th>Ingredients</th>
+            <th>Instructions</th>
+            <th>Actions</th>
           </tr>
         </thead>
-
         <tbody>
-          {recipe &&
-            recipe.map((rp, index) => {
-              return (
-                <tr key={index}>
-                  <td>{rp.namaResep}</td>
-                  <td>{rp.bahan}</td>
-                  {/* <td>
-                    <NavLink
-                      to={`/`}
-                      className="btn btn-sm btn-warning"
-                    >
-                      Ubah
-                    </NavLink>{" "}
-                    &nbsp;
-                    <button
-                      className="btn btn-sm btn-danger"
-                      onClick={() => handleDelete(rp._id, rp.namaResep)}
-                    >
-                      Hapus
-                    </button>
-                  </td> */}
-                </tr>
-              );
-            })}
+          {recipes.length > 0 ? (
+            recipes.map((recipe, index) => (
+              <tr key={recipe._id}>
+                <td>{index + 1}</td>
+                <td>{recipe.namaResep}</td>
+                <td>
+                  {typeof recipe.categoryId === "object"
+                    ? recipe.categoryId.categoryName // Adjust based on your API response
+                    : recipe.categoryId}
+                </td>
+                <td>{recipe.bahan}</td>
+                <td>{recipe.instruksi}</td>
+                <td>
+                  <button
+                    className="btn btn-warning btn-sm me-2 mr-2"
+                    onClick={() => navigate(`/recipe/edit/${recipe._id}`)}
+                  >
+                    Edit
+                  </button>
+                  <button
+                    className="btn btn-danger btn-sm"
+                    onClick={() => handleDelete(recipe._id, recipe.namaResep)}
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan="6" className="text-center">
+                No recipes available
+              </td>
+            </tr>
+          )}
         </tbody>
       </table>
-    </>
+    </div>
   );
 };
 

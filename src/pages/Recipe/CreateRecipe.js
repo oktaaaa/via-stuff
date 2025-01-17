@@ -7,83 +7,118 @@ function CreateRecipe() {
     namaResep: "",
     bahan: "",
     instruksi: "",
+    categoryId: "",
   });
   const [categories, setCategories] = useState([]);
   const navigate = useNavigate();
-  const handleChange = (e, name) => {
-    const value = e.target.value;
-    setRecipe({ ...recipe, [name]: value });
-  };
 
-  React.useEffect(() => {
+  useEffect(() => {
     Axios.get("https://bukuresep-api.vercel.app/category")
-      .then((res) => {
-        const { data } = res;
-        setCategories(data);
-      })
-      .catch((error) => {
-        alert(error);
-      });
+      .then((res) => setCategories(res.data))
+      .catch((error) => alert("Failed to fetch categories: " + error.message));
   }, []);
+
+  const handleChange = (e) => {
+    setRecipe({ ...recipe, [e.target.name]: e.target.value });
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Submitting:", recipe); // Debugging payload
-    try {
-      Axios.post("https://bukuresep-api.vercel.app/recipe/create", recipe).then(
-        (res) => {
-          console.log("Response:", res.data); // Check server response
-          alert("berhasil disimpan");
-          navigate("/recipe");
-        }
-      );
-    } catch (error) {
-      console.error("Error:", error.response?.data || error.message);
-      alert("Failed to save the recipe.");
-    }
+    Axios.post("https://bukuresep-api.vercel.app/recipe/create", recipe)
+      .then(() => {
+        alert("Recipe saved successfully!");
+        navigate("/recipe");
+      })
+      .catch((error) => alert("Failed to save recipe: " + error.message));
   };
 
   return (
-    <div>
-      <h1>Create Recipe</h1>
-      <form>
-        <input
-          name="namaResep"
-          placeholder="Recipe Name"
-          value={recipe.namaResep}
-          onChange={(e) => handleChange(e, "namaResep")}
-          required
-        />
-        <textarea
-          name="bahan"
-          placeholder="bahan"
-          value={recipe.bahan}
-          onChange={(e) => handleChange(e, "bahan")}
-          required
-        />
-        <textarea
-          name="instruksi"
-          placeholder="instruksi"
-          value={recipe.instruksi}
-          onChange={(e) => handleChange(e, "instruksi")}
-          required
-        />
-        <select
-          name="categoryId"
-          value={recipe.categoryId}
-          onChange={(e) => handleChange(e, "categoryId")}
-          required
-        >
-          <option value="">Select Category</option>
-          {categories.map((category) => (
-            <option key={category._id} value={category._id}>
-              {category.categoryName}
-            </option>
-          ))}
-        </select>
-        <button onClick={handleSubmit} type="submit">
-          Create
-        </button>
+    <div className="container mt-5">
+      <h1 className="mb-4">Create Recipe</h1>
+      <form onSubmit={handleSubmit}>
+        <div className="mb-3">
+          <label htmlFor="namaResep" className="form-label">
+            Recipe Name
+          </label>
+          <input
+            type="text"
+            id="namaResep"
+            name="namaResep"
+            className="form-control"
+            placeholder="Enter recipe name"
+            value={recipe.namaResep}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        <div className="form-group mb-3">
+          <label>
+            Category
+          </label>
+          <select
+            id="categoryId"
+            name="categoryId"
+            className="form-control"
+            value={recipe.categoryId}
+            onChange={handleChange}
+            required
+          >
+            <option value="">Select a category</option>
+            {categories.map((category) => (
+              <option key={category._id} value={category._id}>
+                {category.categoryName}
+              </option>
+            ))}
+          </select>
+        </div>
+
+       
+
+        <div className="mb-3">
+          <label htmlFor="bahan" className="form-label">
+            Ingredients
+          </label>
+          <textarea
+            id="bahan"
+            name="bahan"
+            className="form-control"
+            placeholder="Enter ingredients"
+            rows="3"
+            value={recipe.bahan}
+            onChange={handleChange}
+            required
+          ></textarea>
+        </div>
+
+        <div className="mb-3">
+          <label htmlFor="instruksi" className="form-label">
+            Instructions
+          </label>
+          <textarea
+            id="instruksi"
+            name="instruksi"
+            className="form-control"
+            placeholder="Enter instructions"
+            rows="5"
+            value={recipe.instruksi}
+            onChange={handleChange}
+            required
+          ></textarea>
+        </div>
+
+        <div className="d-flex gap-2">
+          <button type="submit" className="btn btn-primary mr-2">
+            Simpan
+          </button>
+          <button
+            type="button"
+            className="btn btn-secondary"
+            onClick={() => navigate("/recipe")}
+          >
+            Cancel
+          </button>
+        </div>
       </form>
     </div>
   );
