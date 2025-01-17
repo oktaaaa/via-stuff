@@ -1,95 +1,63 @@
-import React, { useState } from "react";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import  Axios  from "axios";
+import React from "react";
+import { useState } from "react";
+import { redirect, useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 
-function User({ isLogin }) {
-  const [form, setForm] = useState({
-    username: "",
-    email: "",
-    password: "",
-  });
-  const [error, setError] = useState("");
-  const navigate = useNavigate();
+const User = () =>{
 
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
+    const navigate = useNavigate()
+    const [login, setLogin] = useState({
+        email: "",
+        password: ""
+    })
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    
-
-    const userData = isLogin
-      ? { email: form.email, password: form.password }
-      : { username: form.username, email: form.email, password: form.password };
-
-    // Check for empty fields if it's registration and username is required
-    if (!isLogin && !form.username) {
-      setError("Username is required");
-      return;
+    const handleChange = (e, name) => {
+        const value = e.target.value
+        setLogin({...login, [name]: value})
     }
 
-    try {
-      axios.post(
-        "https://bukuresep-api.vercel.app/auth/login",
-        userData
-      );
+    const handleSubmit = (e) => {
+        e.preventDefault()
 
-      
-      window.location.href ="/recipe";
-      
-    } catch (error) {
-      setError(error.response?.data.message || "Something went wrong!");
+        try {
+            Axios.post("https://bukuresep-api.vercel.app/auth/login", login)
+            .then((res) => {
+                let {token} = res.data
+                let {nama} = res.data
+                let {role} = res.data
+                Cookies.set('token', token)
+                Cookies.set('nama', nama)
+                Cookies.set('role', role)
+
+                window.location.href = '/recipe'
+            })
+        } catch (error) {
+            alert(error)
+        }
     }
-  };
 
-  return (
-    <div>
-      <h2>{isLogin ? "Login" : "Register"}</h2>
-      <form onSubmit={handleSubmit}>
-        {!isLogin && (
-          <div>
-            <input
-              type="text"
-              name="username"
-              placeholder="Username"
-              value={form.username}
-              onChange={handleChange}
-              required
-            />
-          </div>
-        )}
-        <div>
-          <input
-            type="email"
-            name="email"
-            placeholder="Email"
-            value={form.email}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div>
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            value={form.password}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <button type="submit">{isLogin ? "Login" : "Register"}</button>
-      </form>
+    return(
+        <>
+            <h2>Login</h2>
 
-      {error && <p style={{ color: "red" }}>{error}</p>}
+            <form>
+                <div className="form-group">
+                    <label>E-mail</label>
+                    <input type="email" value={login.email} onChange={(e) => handleChange(e, "email")}
+                    className="form-control" placeholder="Input email"/>
+                </div>
 
-      <button onClick={() => navigate(isLogin ? "/register" : "/login")}>
-        {isLogin ? "Create an Account" : "Already have an account? Login"}
-      </button>
-    </div>
-  );
+                <div className="form-group">
+                    <label>Password</label>
+                    <input type="password" value={login.password} onChange={(e) => handleChange(e, "password")}
+                    className="form-control" placeholder="Input password"/>
+                </div>
+                <button onClick={handleSubmit} className="btn btn-primary">Login</button>
+                
+            </form>
+        </>
+    )
 }
 
-export default User;
+export default User
