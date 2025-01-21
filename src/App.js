@@ -23,9 +23,13 @@ function App() {
 
   // Check login status on mount
   useEffect(() => {
-    Axios.get("https://bukuresep-api.vercel.app/auth/login", { withCredentials: true })
+    Axios.post(
+      "https://bukuresep-api.vercel.app/auth/login",
+      {},
+      { withCredentials: true }
+    )
       .then((response) => {
-        setIsLoggedIn(response.data.isAuthenticated); // Adjust based on API response structure
+        setIsLoggedIn(response.data.isAuthenticated); // Check response data structure
       })
       .catch((error) => {
         console.error("Error verifying login status:", error);
@@ -81,11 +85,17 @@ function App() {
                       <button
                         className="btn btn-link nav-link"
                         onClick={() => {
-                          Axios.post("https://bukuresep-api.vercel.app/auth/logout", {}, { withCredentials: true })
+                          Axios.post(
+                            "https://bukuresep-api.vercel.app/auth/logout",
+                            {},
+                            { withCredentials: true }
+                          )
                             .then(() => {
                               setIsLoggedIn(false);
                             })
-                            .catch((error) => console.error("Logout failed:", error));
+                            .catch((error) =>
+                              console.error("Logout failed:", error)
+                            );
                         }}
                       >
                         Logout
