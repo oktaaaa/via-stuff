@@ -7,6 +7,7 @@ import {
   Navigate,
 } from "react-router-dom";
 import Axios from "axios";
+import Cookies from "js-cookie";
 import User from "./pages/User";
 import Recipe from "./pages/Recipe/Recipe";
 import Category from "./pages/Category/Category";
@@ -19,22 +20,18 @@ import CreateReview from "./pages/Review/CreateReview";
 import UpdateReview from "./pages/Review/UpdateReview";
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(null); // Track login status
+  const [error, setError] = useState(null);
 
-  // Check login status on mount
+  // Check if token exists on mount to verify login status
   useEffect(() => {
-    Axios.post(
-      "https://bukuresep-api.vercel.app/auth/login",
-      {},
-      { withCredentials: true }
-    )
-      .then((response) => {
-        setIsLoggedIn(response.data.isAuthenticated); // Check response data structure
-      })
-      .catch((error) => {
-        console.error("Error verifying login status:", error);
-        setIsLoggedIn(false);
-      });
+    const token = Cookies.get("token");
+
+    if (token) {
+      setIsLoggedIn(true);
+    } else {
+      setIsLoggedIn(false);
+    }
   }, []);
 
   // Show a loading state until login status is determined
@@ -85,17 +82,9 @@ function App() {
                       <button
                         className="btn btn-link nav-link"
                         onClick={() => {
-                          Axios.post(
-                            "https://bukuresep-api.vercel.app/auth/logout",
-                            {},
-                            { withCredentials: true }
-                          )
-                            .then(() => {
-                              setIsLoggedIn(false);
-                            })
-                            .catch((error) =>
-                              console.error("Logout failed:", error)
-                            );
+                         
+                          Cookies.remove("token"); // Remove the token
+                          setIsLoggedIn(false); // Update login status
                         }}
                       >
                         Logout
@@ -120,6 +109,9 @@ function App() {
             </div>
           </div>
         </nav>
+
+        {/* Display error if network error occurs */}
+        {error && <div className="alert alert-danger">{error}</div>}
 
         {/* Routes */}
         <Routes>
