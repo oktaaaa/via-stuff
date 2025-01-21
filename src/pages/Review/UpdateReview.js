@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import Axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
-function CreateReview() {
+function UpdateReview() {
+  const { id } = useParams();
   const [review, setReview] = useState({
     comment: "",
     rating: "",
@@ -20,37 +21,45 @@ function CreateReview() {
         console.error("Error fetching recipes:", error);
         alert("Failed to load recipes.");
       });
-  }, []);
+
+    Axios.get(`https://bukuresep-api.vercel.app/review/${id}`)
+      .then((res) => {
+        setReview(res.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching review:", error);
+        alert("Failed to load review.");
+      });
+  }, [id]);
 
   const handleChange = (e) => {
-    setReview({ ...review, [e.target.name]: e.target.value});
+    setReview({ ...review, [e.target.name]: e.target.value });
   };
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
-   
-
-    Axios.post("https://bukuresep-api.vercel.app/review/create", review)
+    Axios.put(`https://bukuresep-api.vercel.app/review/${id}`, review)
       .then(() => {
-        alert("Review created successfully!");
+        alert("Review updated successfully!");
         navigate("/review");
       })
       .catch((error) => {
-        console.error("Error creating review:", error);
-        alert("Failed to create the review.");
+        console.error("Error updating review:", error);
+        alert("Failed to update the review.");
       });
   };
 
   return (
     <div className="container mt-5">
-      <h1>Buat Review</h1>
+      <h1>Update Review</h1>
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
           <label htmlFor="comment" className="form-label">
             Review Text
           </label>
           <textarea
-            id="comment"
+            type="text"
             className="form-control"
             name="comment"
             placeholder="Review Text"
@@ -76,14 +85,14 @@ function CreateReview() {
             required
           />
         </div>
-        <div className="mb-3">
-          <label htmlFor="recipeId" className="form-label">
+        <div className="form-group mb-3">
+          <label>
             Select Recipe
           </label>
           <select
             id="recipeId"
             name="recipeId"
-            className="form-select"
+            className="form-control"
             value={review.recipeId}
             onChange={handleChange}
             required
@@ -97,11 +106,11 @@ function CreateReview() {
           </select>
         </div>
         <button type="submit" className="btn btn-primary">
-          Create
+          Update
         </button>
       </form>
     </div>
   );
 }
 
-export default CreateReview;
+export default UpdateReview;

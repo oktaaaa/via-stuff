@@ -30,33 +30,43 @@ function Review() {
   };
 
   const handleEdit = (id) => {
-    navigate(`/review/edit/${id}`);
+    navigate(`/review/update/${id}`);
   };
 
   return (
     <div className="container mt-5">
       <h1>Reviews</h1>
-      <div className="card-deck">
+      <div className="row">
         {reviews.map((review) => (
-          <div key={review._id} className="card bg-light mb-3">
-            <div className="card-header">{review.recipeId.namaResep}</div>
-            <div className="card-body">
-              <h5 className="card-title">Review</h5>
-              <p className="card-text">
-              Rating: {review.rating} <tr/>
-              {review.comment}
-              </p>
-              <button className="btn btn-warning me-2 mr-3">Edit</button>
-              <button className="btn btn-danger">Delete</button>
+          <div key={review._id} className="col-md-4 mb-4">
+            <div className="card bg-light">
+              <div className="card-header">
+                {review.recipeId.namaResep}
+              </div>
+              <div className="card-body">
+                <h5 className="card-title">Review</h5>
+                <p className="card-text">
+                  <strong>Rating:</strong> {review.rating}
+                  <br />
+                  <strong>Comment:</strong> {review.comment || "No comment"}
+                </p>
+                <button
+                  className="btn btn-warning me-2"
+                  onClick={() => navigate(`/review/update/${review._id}`)}
+                >
+                  Edit
+                </button>
+                <button
+                  className="btn btn-danger"
+                  onClick={() => handleDelete(review._id)}
+                >
+                  Delete
+                </button>
+              </div>
             </div>
-            
           </div>
         ))}
-
-        
       </div>
-
-    
     </div>
   );
 }

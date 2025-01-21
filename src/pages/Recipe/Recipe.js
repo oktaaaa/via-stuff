@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 const Recipe = () => {
   const [recipes, setRecipes] = useState([]);
   const navigate = useNavigate();
+  const [categories, setCategories] = useState([]);
 
   const fetchRecipes = async () => {
     try {
@@ -17,8 +18,15 @@ const Recipe = () => {
     }
   };
 
+  const fetchCategories = async () => {
+    const response = await Axios.get('https://bukuresep-api.vercel.app/category');
+    setCategories(console.log(response.data));
+
+  };
+
   useEffect(() => {
     fetchRecipes();
+    fetchCategories();
   }, []);
 
   // Handle delete action
@@ -63,16 +71,14 @@ const Recipe = () => {
                 <td>{index + 1}</td>
                 <td>{recipe.namaResep}</td>
                 <td>
-                  {typeof recipe.categoryId === "object"
-                    ? recipe.categoryId.categoryName
-                    : recipe.categoryId}
+                  {recipe.categoryId.categoryName}
                 </td>
                 <td>{recipe.bahan}</td>
                 <td>{recipe.instruksi}</td>
                 <td>
                   <button
                     className="btn btn-warning btn-sm me-2 mr-2"
-                    onClick={() => navigate(`/recipe/edit/${recipe._id}`)}
+                    onClick={() => navigate(`/recipe/update/${recipe._id}`)}
                   >
                     Edit
                   </button>

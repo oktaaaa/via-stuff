@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import Axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
-function CreateRecipe() {
+function UpdateRecipe() {
+  const { id } = useParams(); 
   const [recipe, setRecipe] = useState({
     namaResep: "",
     bahan: "",
@@ -13,10 +14,18 @@ function CreateRecipe() {
   const navigate = useNavigate();
 
   useEffect(() => {
+   
     Axios.get("https://bukuresep-api.vercel.app/category")
       .then((res) => setCategories(res.data))
       .catch((error) => alert("Failed to fetch categories: " + error.message));
-  }, []);
+
+    
+    Axios.get(`https://bukuresep-api.vercel.app/recipe/${id}`)
+      .then((res) => {
+        setRecipe(res.data);
+      })
+      .catch((error) => alert("Failed to fetch recipe: " + error.message));
+  }, [id]);
 
   const handleChange = (e) => {
     setRecipe({ ...recipe, [e.target.name]: e.target.value });
@@ -24,17 +33,17 @@ function CreateRecipe() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    Axios.post("https://bukuresep-api.vercel.app/recipe/create", recipe)
+    Axios.put(`https://bukuresep-api.vercel.app/recipe/${id}`, recipe)
       .then(() => {
-        alert("Recipe saved successfully!");
+        alert("Recipe updated successfully!");
         navigate("/recipe");
       })
-      .catch((error) => alert("Failed to save recipe: " + error.message));
+      .catch((error) => alert("Failed to update recipe: " + error.message));
   };
 
   return (
     <div className="container mt-5">
-      <h1 className="mb-4">Create Recipe</h1>
+      <h1 className="mb-4">Update Recipe</h1>
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
           <label htmlFor="namaResep" className="form-label">
@@ -64,9 +73,11 @@ function CreateRecipe() {
           >
             <option value="">Select a category</option>
             {categories &&
-              categories.map((category, index) => {
-                return <option value={category._id}>{category.categoryName}</option>;
-              })}
+              categories.map((category) => (
+                <option key={category._id} value={category._id}>
+                  {category.categoryName}
+                </option>
+              ))}
           </select>
         </div>
 
@@ -104,7 +115,7 @@ function CreateRecipe() {
 
         <div className="d-flex gap-2">
           <button type="submit" className="btn btn-primary mr-2">
-            Simpan
+            Update
           </button>
           <button
             type="button"
@@ -119,4 +130,4 @@ function CreateRecipe() {
   );
 }
 
-export default CreateRecipe;
+export default UpdateRecipe;

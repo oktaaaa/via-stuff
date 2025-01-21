@@ -11,7 +11,11 @@ import Recipe from "./pages/Recipe/Recipe";
 import Category from "./pages/Category/Category";
 import Review from "./pages/Review/Review";
 import CreateRecipe from "./pages/Recipe/CreateRecipe";
-
+import CreateCategory from "./pages/Category/CreateCategory";
+import UpdateCategory from "./pages/Category/UpdateCategory";
+import UpdateRecipe from "./pages/Recipe/UpdateRecipe";
+import CreateReview from "./pages/Review/CreateReview";
+import UpdateReview from "./pages/Review/UpdateReview";
 function App() {
   // Check if the user is logged in by checking the token in localStorage
   const isLoggedIn = "https://bukuresep-api.vercel.app/auth/login";
@@ -55,7 +59,6 @@ function App() {
                         Reviews
                       </Link>
                     </li>
-                    
                   </>
                 ) : (
                   <>
@@ -99,6 +102,11 @@ function App() {
             element={isLoggedIn ? <Review /> : <Navigate to="/login" />}
           />
           <Route path="/recipe/create" element={<CreateRecipe />} />
+          <Route path="/review/create" element={<CreateReview />} />
+          <Route path="/categories/create" element={<CreateCategory />} />
+          <Route path="/categories/update/:id" element={<UpdateCategory />} />
+          <Route path="/recipe/update/:id" element={<UpdateRecipe />} />
+          <Route path="/review/update/:id" element={<UpdateReview />} />
         </Routes>
       </div>
     </Router>

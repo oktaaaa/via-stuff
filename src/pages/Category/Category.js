@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import {NavLink, useNavigate } from "react-router-dom";
 
 function Category() {
   const [categories, setCategories] = useState([]);
-
+  const navigate = useNavigate();
   // Fetch categories from API
   const fetchCategories = async () => {
     try {
@@ -33,7 +34,7 @@ function Category() {
   // Handle Add New Category action (for demonstration)
   const handleAddNewCategory = () => {
     // Logic for adding a new category can be implemented here
-    alert("Add New Category clicked!");
+    navigate("/categories/create");
   };
 
   return (
@@ -57,12 +58,8 @@ function Category() {
                 <td>{index + 1}</td>
                 <td>{category.categoryName}</td>
                 <td>
-                  <button
-                    className="btn btn-warning btn-sm me-2 mr-2"
-                    onClick={() => alert(`Edit ${category.categoryName}`)}
-                  >
-                    Edit
-                  </button>
+                 
+                    <NavLink to = {`/categories/update/${category._id}`} className = "btn btn-warning btn-sm me-2 mr-2">Ubah</NavLink> &nbsp;
                   <button
                     className="btn btn-danger btn-sm"
                     onClick={() => handleDelete(category._id)}
