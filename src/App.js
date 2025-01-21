@@ -20,10 +20,10 @@ import CreateReview from "./pages/Review/CreateReview";
 import UpdateReview from "./pages/Review/UpdateReview";
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(null); // Track login status
+  const [isLoggedIn, setIsLoggedIn] = useState(null);
   const [error, setError] = useState(null);
 
-  // Check if token exists on mount to verify login status
+  
   useEffect(() => {
     const token = Cookies.get("token");
 
@@ -34,7 +34,7 @@ function App() {
     }
   }, []);
 
-  // Show a loading state until login status is determined
+ 
   if (isLoggedIn === null) {
     return <div>Loading...</div>;
   }
@@ -42,7 +42,7 @@ function App() {
   return (
     <Router>
       <div>
-        {/* Navbar */}
+     
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
           <div className="container-fluid">
             <Link className="navbar-brand" to="/">
@@ -83,8 +83,8 @@ function App() {
                         className="btn btn-link nav-link"
                         onClick={() => {
                          
-                          Cookies.remove("token"); // Remove the token
-                          setIsLoggedIn(false); // Update login status
+                          Cookies.remove("token");
+                          setIsLoggedIn(false); 
                         }}
                       >
                         Logout
@@ -110,10 +110,10 @@ function App() {
           </div>
         </nav>
 
-        {/* Display error if network error occurs */}
+     
         {error && <div className="alert alert-danger">{error}</div>}
 
-        {/* Routes */}
+       
         <Routes>
           <Route
             path="/"

@@ -3,11 +3,10 @@ import { useParams, useNavigate } from "react-router-dom";
 import Axios from "axios";
 
 function UpdateCategory() {
-  const { id } = useParams(); // Get the category ID from the route
+  const { id } = useParams();
   const [categoryName, setCategoryName] = useState("");
   const navigate = useNavigate();
 
-  // Fetch the category details to prefill the form
   useEffect(() => {
     Axios.get(`https://bukuresep-api.vercel.app/category/${id}`)
       .then((res) => {
@@ -26,7 +25,7 @@ function UpdateCategory() {
     })
       .then(() => {
         alert("Category updated successfully!");
-        navigate("/categories"); // Redirect to categories list
+        navigate("/categories"); 
       })
       .catch((error) => {
         alert("Failed to update category: " + error.message);

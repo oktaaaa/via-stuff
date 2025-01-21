@@ -5,7 +5,6 @@ import {NavLink, useNavigate } from "react-router-dom";
 function Category() {
   const [categories, setCategories] = useState([]);
   const navigate = useNavigate();
-  // Fetch categories from API
   const fetchCategories = async () => {
     try {
       const response = await axios.get(
@@ -21,7 +20,6 @@ function Category() {
     fetchCategories();
   }, []);
 
-  // Handle Delete action
   const handleDelete = async (id) => {
     try {
       await axios.delete(`https://bukuresep-api.vercel.app/category/${id}`);
@@ -31,9 +29,7 @@ function Category() {
     }
   };
 
-  // Handle Add New Category action (for demonstration)
   const handleAddNewCategory = () => {
-    // Logic for adding a new category can be implemented here
     navigate("/categories/create");
   };
 
