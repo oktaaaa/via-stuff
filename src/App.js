@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   BrowserRouter as Router,
   Route,
@@ -6,6 +6,7 @@ import {
   Link,
   Navigate,
 } from "react-router-dom";
+import Axios from "axios";
 import User from "./pages/User";
 import Recipe from "./pages/Recipe/Recipe";
 import Category from "./pages/Category/Category";
@@ -16,14 +17,31 @@ import UpdateCategory from "./pages/Category/UpdateCategory";
 import UpdateRecipe from "./pages/Recipe/UpdateRecipe";
 import CreateReview from "./pages/Review/CreateReview";
 import UpdateReview from "./pages/Review/UpdateReview";
+
 function App() {
-  // Check if the user is logged in by checking the token in localStorage
-  const isLoggedIn = "https://bukuresep-api.vercel.app/auth/login";
+  const [isLoggedIn, setIsLoggedIn] = useState(null);
+
+  // Check login status on mount
+  useEffect(() => {
+    Axios.get("https://bukuresep-api.vercel.app/auth/login", { withCredentials: true })
+      .then((response) => {
+        setIsLoggedIn(response.data.isAuthenticated); // Adjust based on API response structure
+      })
+      .catch((error) => {
+        console.error("Error verifying login status:", error);
+        setIsLoggedIn(false);
+      });
+  }, []);
+
+  // Show a loading state until login status is determined
+  if (isLoggedIn === null) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <Router>
       <div>
-        {/* Bootstrap Navbar */}
+        {/* Navbar */}
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
           <div className="container-fluid">
             <Link className="navbar-brand" to="/">
@@ -59,6 +77,20 @@ function App() {
                         Reviews
                       </Link>
                     </li>
+                    <li className="nav-item">
+                      <button
+                        className="btn btn-link nav-link"
+                        onClick={() => {
+                          Axios.post("https://bukuresep-api.vercel.app/auth/logout", {}, { withCredentials: true })
+                            .then(() => {
+                              setIsLoggedIn(false);
+                            })
+                            .catch((error) => console.error("Logout failed:", error));
+                        }}
+                      >
+                        Logout
+                      </button>
+                    </li>
                   </>
                 ) : (
                   <>
@@ -79,8 +111,8 @@ function App() {
           </div>
         </nav>
 
+        {/* Routes */}
         <Routes>
-          {/* Redirect user to recipes page if they are already logged in */}
           <Route
             path="/"
             element={
@@ -101,12 +133,30 @@ function App() {
             path="/review"
             element={isLoggedIn ? <Review /> : <Navigate to="/login" />}
           />
-          <Route path="/recipe/create" element={<CreateRecipe />} />
-          <Route path="/review/create" element={<CreateReview />} />
-          <Route path="/categories/create" element={<CreateCategory />} />
-          <Route path="/categories/update/:id" element={<UpdateCategory />} />
-          <Route path="/recipe/update/:id" element={<UpdateRecipe />} />
-          <Route path="/review/update/:id" element={<UpdateReview />} />
+          <Route
+            path="/recipe/create"
+            element={isLoggedIn ? <CreateRecipe /> : <Navigate to="/login" />}
+          />
+          <Route
+            path="/review/create"
+            element={isLoggedIn ? <CreateReview /> : <Navigate to="/login" />}
+          />
+          <Route
+            path="/categories/create"
+            element={isLoggedIn ? <CreateCategory /> : <Navigate to="/login" />}
+          />
+          <Route
+            path="/categories/update/:id"
+            element={isLoggedIn ? <UpdateCategory /> : <Navigate to="/login" />}
+          />
+          <Route
+            path="/recipe/update/:id"
+            element={isLoggedIn ? <UpdateRecipe /> : <Navigate to="/login" />}
+          />
+          <Route
+            path="/review/update/:id"
+            element={isLoggedIn ? <UpdateReview /> : <Navigate to="/login" />}
+          />
         </Routes>
       </div>
     </Router>
