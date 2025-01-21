@@ -83,7 +83,7 @@ function CreateReview() {
           <select
             id="recipeId"
             name="recipeId"
-            className="form-select"
+            className="form-control"
             value={review.recipeId}
             onChange={handleChange}
             required

@@ -29,20 +29,21 @@ function Review() {
       });
   };
 
-  const handleEdit = (id) => {
-    navigate(`/review/update/${id}`);
+  const handleAddReview = (id) => {
+    navigate('/review/create');
   };
 
   return (
     <div className="container mt-5">
       <h1>Reviews</h1>
+      <button className="btn btn-primary mb-3" onClick={handleAddReview}>
+        + Add Review
+      </button>
       <div className="row">
         {reviews.map((review) => (
           <div key={review._id} className="col-md-4 mb-4">
             <div className="card bg-light">
-              <div className="card-header">
-                {review.recipeId.namaResep}
-              </div>
+              <div className="card-header">{review.recipeId.namaResep}</div>
               <div className="card-body">
                 <h5 className="card-title">Review</h5>
                 <p className="card-text">
@@ -51,7 +52,7 @@ function Review() {
                   <strong>Comment:</strong> {review.comment || "No comment"}
                 </p>
                 <button
-                  className="btn btn-warning me-2"
+                  className="btn btn-warning me-2 mr-2"
                   onClick={() => navigate(`/review/update/${review._id}`)}
                 >
                   Edit
