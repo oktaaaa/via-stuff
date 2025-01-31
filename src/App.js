@@ -48,7 +48,7 @@ function App() {
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
           <div className="container-fluid">
             <Link className="navbar-brand" to="/">
-              RecipeApp
+              Via Stuff
             </Link>
             <button
               className="navbar-toggler"
@@ -125,7 +125,7 @@ function App() {
           <Route
             path="/"
             element={
-              <Navigate to="/recipe"  />
+              <Dashboard />
             }
           />
           <Route path="/login" element={<User isLogin={true} />} />
