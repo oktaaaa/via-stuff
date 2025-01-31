@@ -9,15 +9,17 @@ import {
 import Axios from "axios";
 import Cookies from "js-cookie";
 import User from "./pages/User";
-import Recipe from "./pages/Recipe/Recipe";
+import Skincare from "./pages/Skincare/Skincare";
 import Category from "./pages/Category/Category";
 import Review from "./pages/Review/Review";
-import CreateRecipe from "./pages/Recipe/CreateRecipe";
+import SkincareCreate from "./pages/Skincare/CreateSkincare";
 import CreateCategory from "./pages/Category/CreateCategory";
 import UpdateCategory from "./pages/Category/UpdateCategory";
-import UpdateRecipe from "./pages/Recipe/UpdateRecipe";
+import UpdateRecipe from "./pages/Skincare/UpdateSkincare";
 import CreateReview from "./pages/Review/CreateReview";
 import UpdateReview from "./pages/Review/UpdateReview";
+import Dashboard from "./pages/Dashboard";
+import SkincareUpdate from "./pages/Skincare/UpdateSkincare";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(null);
@@ -61,11 +63,16 @@ function App() {
             </button>
             <div className="collapse navbar-collapse" id="navbarNav">
               <ul className="navbar-nav">
-                {isLoggedIn ? (
+                
                   <>
                     <li className="nav-item">
-                      <Link className="nav-link" to="/recipe">
-                        Recipes
+                      <Link className="nav-link" to="/skincare">
+                        Skincare
+                      </Link>
+                    </li>
+                    <li className="nav-item">
+                      <Link className="nav-link" to="/dashboard">
+                        Dashboard
                       </Link>
                     </li>
                     <li className="nav-item">
@@ -91,7 +98,7 @@ function App() {
                       </button>
                     </li>
                   </>
-                ) : (
+               
                   <>
                     <li className="nav-item">
                       <Link className="nav-link" to="/login">
@@ -104,7 +111,7 @@ function App() {
                       </Link>
                     </li>
                   </>
-                )}
+                
               </ul>
             </div>
           </div>
@@ -118,26 +125,34 @@ function App() {
           <Route
             path="/"
             element={
-              isLoggedIn ? <Navigate to="/recipe" /> : <Navigate to="/login" />
+              <Navigate to="/recipe"  />
             }
           />
           <Route path="/login" element={<User isLogin={true} />} />
           <Route path="/register" element={<User isLogin={false} />} />
           <Route
-            path="/recipe"
-            element={isLoggedIn ? <Recipe /> : <Navigate to="/login" />}
+            path="/skincare"
+            element={<Skincare />}
+          />
+          <Route
+            path="/dashboard"
+            element={<Dashboard />}
           />
           <Route
             path="/categories"
-            element={isLoggedIn ? <Category /> : <Navigate to="/login" />}
+            element={<Category />}
           />
           <Route
             path="/review"
             element={isLoggedIn ? <Review /> : <Navigate to="/login" />}
           />
           <Route
-            path="/recipe/create"
-            element={isLoggedIn ? <CreateRecipe /> : <Navigate to="/login" />}
+            path="/skincare/create"
+            element={<SkincareCreate />}
+          />
+          <Route
+            path="/skincare/update/:id"
+            element={<SkincareUpdate /> }
           />
           <Route
             path="/review/create"
