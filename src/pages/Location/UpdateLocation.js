@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Axios from "axios";
 
-function UpdateCategory() {
+function UpdateLocation() {
   const { id } = useParams();
   const [categoryName, setCategoryName] = useState("");
   const navigate = useNavigate();
@@ -64,4 +64,4 @@ function UpdateCategory() {
   );
 }
 
-export default UpdateCategory;
+export default UpdateLocation;

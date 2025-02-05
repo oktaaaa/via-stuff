@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import {NavLink, useNavigate } from "react-router-dom";
 
-function Category() {
+function Location() {
   const [categories, setCategories] = useState([]);
   const navigate = useNavigate();
   const fetchCategories = async () => {
@@ -78,4 +78,4 @@ function Category() {
   );
 }
 
-export default Category;
+export default Location;

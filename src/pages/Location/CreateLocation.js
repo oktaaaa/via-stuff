@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-function CreateCategory() {
+function CreateLocation() {
   const [categoryName, setCategoryName] = useState({
     categoryName: "",
   });
@@ -58,4 +58,4 @@ function CreateCategory() {
   );
 }
 
-export default CreateCategory;
+export default CreateLocation;

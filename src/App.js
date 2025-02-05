@@ -10,14 +10,13 @@ import Axios from "axios";
 import Cookies from "js-cookie";
 import User from "./pages/User";
 import Skincare from "./pages/Skincare/Skincare";
-import Category from "./pages/Category/Category";
-import Review from "./pages/Review/Review";
+
+
 import SkincareCreate from "./pages/Skincare/CreateSkincare";
-import CreateCategory from "./pages/Category/CreateCategory";
-import UpdateCategory from "./pages/Category/UpdateCategory";
+import CreateLocation from "./pages/Location/CreateLocation";
+import Location from "./pages/Location/Location";
+import UpdateLocation from "./pages/Location/UpdateLocation";
 import UpdateRecipe from "./pages/Skincare/UpdateSkincare";
-import CreateReview from "./pages/Review/CreateReview";
-import UpdateReview from "./pages/Review/UpdateReview";
 import Dashboard from "./pages/Dashboard";
 import SkincareUpdate from "./pages/Skincare/UpdateSkincare";
 
@@ -81,8 +80,8 @@ function App() {
                       </Link>
                     </li>
                     <li className="nav-item">
-                      <Link className="nav-link" to="/review">
-                        Reviews
+                      <Link className="nav-link" to="/location">
+                        Location
                       </Link>
                     </li>
                     <li className="nav-item">
@@ -139,13 +138,13 @@ function App() {
             element={<Dashboard />}
           />
           <Route
-            path="/categories"
-            element={<Category />}
+            path="/location"
+            element={<Location />}
           />
-          <Route
+          {/* <Route
             path="/review"
             element={isLoggedIn ? <Review /> : <Navigate to="/login" />}
-          />
+          /> */}
           <Route
             path="/skincare/create"
             element={<SkincareCreate />}
@@ -154,17 +153,17 @@ function App() {
             path="/skincare/update/:id"
             element={<SkincareUpdate /> }
           />
-          <Route
+          {/* <Route
             path="/review/create"
             element={isLoggedIn ? <CreateReview /> : <Navigate to="/login" />}
-          />
+          /> */}
           <Route
             path="/categories/create"
-            element={isLoggedIn ? <CreateCategory /> : <Navigate to="/login" />}
+            element={isLoggedIn ? <CreateLocation /> : <Navigate to="/login" />}
           />
           <Route
             path="/categories/update/:id"
-            element={isLoggedIn ? <UpdateCategory /> : <Navigate to="/login" />}
+            element={isLoggedIn ? <UpdateLocation /> : <Navigate to="/login" />}
           />
           <Route
             path="/recipe/update/:id"
@@ -172,7 +171,7 @@ function App() {
           />
           <Route
             path="/review/update/:id"
-            element={isLoggedIn ? <UpdateReview /> : <Navigate to="/login" />}
+            element={isLoggedIn ? <UpdateLocation /> : <Navigate to="/login" />}
           />
         </Routes>
       </div>
