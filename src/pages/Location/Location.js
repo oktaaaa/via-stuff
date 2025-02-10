@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import {NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 function Location() {
-  const [categories, setCategories] = useState([]);
+  const [locations, setLocations] = useState([]);
   const navigate = useNavigate();
   const fetchCategories = async () => {
     try {
       const response = await axios.get(
-        "https://bukuresep-api.vercel.app/category"
+        "https://asetvia-oktaaaas-projects.vercel.app/location"
       );
-      setCategories(response.data);
+      setLocations(response.data);
     } catch (error) {
       console.error("Error fetching categories:", error);
     }
@@ -23,7 +23,7 @@ function Location() {
   const handleDelete = async (id) => {
     try {
       await axios.delete(`https://bukuresep-api.vercel.app/category/${id}`);
-      setCategories(categories.filter((category) => category._id !== id));
+      setLocations(locations.filter((category) => category._id !== id));
     } catch (error) {
       console.error("Error deleting category:", error);
     }
@@ -35,30 +35,53 @@ function Location() {
 
   return (
     <div className="container mt-4">
-      <h2 className="mb-4">Categories</h2>
+      <h2 className="mb-4">Locations</h2>
       <button className="btn btn-primary mb-3" onClick={handleAddNewCategory}>
-        Add New Category
+        Add New Location
       </button>
       <table className="table table-bordered table-striped">
         <thead className="thead-dark">
           <tr>
             <th>#</th>
-            <th>Category Name</th>
+            <th>Location Name</th>
+            <th>Space Name and Code</th>
+            <th>Image</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          {categories.length > 0 ? (
-            categories.map((category, index) => (
-              <tr key={category._id}>
+          {locations.length > 0 ? (
+            locations.map((location, index) => (
+              <tr key={location._id}>
                 <td>{index + 1}</td>
-                <td>{category.categoryName}</td>
+                <td>{location.name}</td>
+                <td>{location.spaceNameAndCode}</td>
                 <td>
-                 
-                    <NavLink to = {`/categories/update/${category._id}`} className = "btn btn-warning btn-sm me-2 mr-2">Ubah</NavLink> &nbsp;
+                  {location.image ? (
+                    <img
+                      src={`https://asetvia-oktaaaas-projects.vercel.app${location.image}`}
+                      alt={location.name}
+                      style={{
+                        width: "100px",
+                        height: "100px",
+                        objectFit: "cover",
+                      }}
+                    />
+                  ) : (
+                    "No Image"
+                  )}
+                </td>
+                <td>
+                  <NavLink
+                    to={`/categories/update/${location._id}`}
+                    className="btn btn-warning btn-sm me-2 mr-2"
+                  >
+                    Ubah
+                  </NavLink>{" "}
+                  &nbsp;
                   <button
                     className="btn btn-danger btn-sm"
-                    onClick={() => handleDelete(category._id)}
+                    onClick={() => handleDelete(location._id)}
                   >
                     Delete
                   </button>
@@ -68,7 +91,7 @@ function Location() {
           ) : (
             <tr>
               <td colSpan="3" className="text-center">
-                No categories available
+                No location available
               </td>
             </tr>
           )}

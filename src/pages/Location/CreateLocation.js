@@ -3,22 +3,35 @@ import Axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 function CreateLocation() {
-  const [categoryName, setCategoryName] = useState({
-    categoryName: "",
+  const [location, setLocation] = useState({
+    name: "",
+    image: null,
   });
   const navigate = useNavigate();
 
   const handleChange = (e) => {
-    setCategoryName({ ...categoryName, [e.target.name]: e.target.value });
+    setLocation({ ...location, [e.target.name]: e.target.value });
   };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    Axios.post("https://bukuresep-api.vercel.app/category/create", categoryName)
+
+    const formData = new FormData();
+    formData.append("name", location.name);
+    formData.append("image", location.image);
+
+    Axios.post(
+      "https://asetvia-oktaaaas-projects.vercel.app/location/add-location",
+      formData,
+      {
+        headers: { "Content-Type": "multipart/form-data" },
+      }
+    )
       .then(() => {
-        alert("Category saved successfully!");
-        navigate("/categories");
+        alert("Location saved successfully!");
+        navigate("/location");
       })
-      .catch((error) => alert("Failed to save recipe: " + error.message));
+      .catch((error) => alert("Failed to save category: " + error.message));
   };
 
   return (
@@ -35,9 +48,18 @@ function CreateLocation() {
             name="categoryName"
             className="form-control"
             placeholder="Tambah category"
-            value={categoryName.categoryName}
+            value={location.name}
             onChange={handleChange}
             required
+          />
+
+          <input
+            type="file"
+            accept="image/*"
+            className="form-control"
+            onChange={(e) =>
+              setLocation({ ...location, image: e.target.files[0] })
+            }
           />
         </div>
 
@@ -48,7 +70,7 @@ function CreateLocation() {
           <button
             type="button"
             className="btn btn-secondary"
-            onClick={() => navigate("/categories")}
+            onClick={() => navigate("/location")}
           >
             Cancel
           </button>

@@ -20,15 +20,15 @@ const Dashboard = () => {
   }, []);
 
   useEffect(() => {
-    // Filter items expiring within the next 5 months
+    //expiring within five months
     const today = new Date();
-    const fiveMonthsLater = new Date();
-    fiveMonthsLater.setMonth(today.getMonth() + 5);
+    const fiveMonths = new Date();
+    fiveMonths.setMonth(today.getMonth() + 5);
 
     const filtered = skincareData.filter((item) => {
       const expiryDate = new Date(item.expiredYear);
       const stock = item.stock
-      return expiryDate >= today && expiryDate <= fiveMonthsLater || stock === 1;
+      return expiryDate >= today && expiryDate <= fiveMonths || stock === 1;
     });
 
     setFilteredSkincare(filtered);
@@ -36,7 +36,7 @@ const Dashboard = () => {
 
   return (
     <div className="p-4">
-      <h2 className="text-xl font-bold mb-4">Expiring Skincare Products</h2>
+      <h2 className="text-xl font-bold mb-4">Low Stock and Expiring Skincare Products</h2>
       <table className="w-full border-collapse border border-gray-300">
         <thead>
           <tr className="bg-gray-100">
